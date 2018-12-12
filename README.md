@@ -43,15 +43,19 @@ Images and schematic can be found in the `./documenation` folder.
 The gerberfiles to manufacture the PCB too. You also can use a breadboard or a arduino prototyping shiled to build the simple schematic.
 
 ## THE CONTROL PCB
-![test image size](/documenation/pictures/ctrl_photo.png){:class="img-responsive"}
+![test image size](/documenation/pictures/ctrl_photo.png)
 
 ## NIXIE ADAPTER FOR IN-8 TUBES
-![test image size](/documenation/pictures/in8_photo.png){:class="img-responsive"}
+![test image size](/documenation/pictures/in8_photo.png)
 
 You can replace the resistors with wires, except for the `R115 Anode-Current-Resistor 20K`
 
 ## NIXIE ADAPTER FOR IN-16 TUBES
-![test image size](/documenation/pictures/in16_photo.png){:class="img-responsive"}
+![test image size](/documenation/pictures/in16_photo.png)
 
 
-## 
+### SOFTWARE
+
+
+
+
