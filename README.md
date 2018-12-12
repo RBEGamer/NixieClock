@@ -37,9 +37,12 @@ A IN-16/IN-8 based nixie clock
 * 4 M3 screws 10mm
 * 2 M4 screws 16mm
 * woodglue
-* 2k glue
+* 2k glue (mounting 3d parts on glass)
+* hotglue
 
-
+# TOOLS
+* drill 4mm 6mm 20mm(for tubes)
+* saw
 
 
 # PCB
