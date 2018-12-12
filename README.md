@@ -45,4 +45,11 @@ The gerberfiles to manufacture the PCB too. You also can use a breadboard or a a
 ## THE CONTROL PCB
 ![test image size](/documenation/pictures/ctrl_photo.png){:class="img-responsive"}
 
+## NIXIE ADAPTER FOR IN-8 TUBES
+![test image size](/documenation/pictures/in8_photo.png){:class="img-responsive"}
+
+## NIXIE ADAPTER FOR IN-16 TUBES
+![test image size](/documenation/pictures/in16_photo.png){:class="img-responsive"}
+
+
 ## 
