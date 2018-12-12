@@ -37,9 +37,12 @@ A IN-16/IN-8 based nixie clock
 * 4 M3 screws 10mm
 * 2 M4 screws 16mm
 * woodglue
-* 2k glue
+* 2k glue (mounting 3d parts on glass)
+* hotglue
 
-
+# TOOLS
+* drill 4mm 6mm 20mm(for tubes)
+* saw
 
 
 # PCB
@@ -52,7 +55,8 @@ The gerberfiles to manufacture the PCB too. You also can use a breadboard or a a
 ## NIXIE ADAPTER FOR IN-8 TUBES
 ![test image size](/documenation/pictures/in8_photo.png)
 
-You can replace the resistors with wires, except for the `R115 Anode-Current-Resistor 20K`
+You can replace the resistors with wires, except for the `R115 Anode-Current-Resistor 20K`.
+The other resitors are for adjust the brightness of each tube segment.
 
 ## NIXIE ADAPTER FOR IN-16 TUBES
 ![test image size](/documenation/pictures/in16_photo.png)
@@ -71,6 +75,24 @@ Select with the `OK-BUTTON` if you want to change minutes or hours and change th
 # PICTURES
 
 
+
+## SIMPLE BOX
+![test image size](/documenation/pictures_build/box_complete.jpg)
+
+
+## PCB TEST 1
+![test image size](/documenation/pictures_build/pcb_test.jpg)
+
+## PCB TEST 2
+![test image size](/documenation/pictures_build/pcb_test_2.jpg)
+
+
+## TUBE MOUNT 1
+![test image size](/documenation/pictures_build/tube_mount_2.jpg)
+
+
+## TUBE MOUNT 2
+![test image size](/documenation/pictures_build/tube_mount.jpg)
 
 
 
