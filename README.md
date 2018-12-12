@@ -48,6 +48,8 @@ The gerberfiles to manufacture the PCB too. You also can use a breadboard or a a
 ## NIXIE ADAPTER FOR IN-8 TUBES
 ![test image size](/documenation/pictures/in8_photo.png){:class="img-responsive"}
 
+You can replace the resistors with wires, except for the `R115 Anode-Current-Resistor 20K`
+
 ## NIXIE ADAPTER FOR IN-16 TUBES
 ![test image size](/documenation/pictures/in16_photo.png){:class="img-responsive"}
 
