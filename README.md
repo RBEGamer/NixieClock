@@ -49,6 +49,10 @@ A IN-16/IN-8 based nixie clock
 Images and schematic can be found in the `./documenation` folder.
 The gerberfiles to manufacture the PCB too. You also can use a breadboard or a arduino prototyping shiled to build the simple schematic.
 
+# CASE
+
+
+
 
 # DRILLING
 For the top wood plate i have made drill drawing where to drill the 20mm holes for the tubes, if you are using the 10x20cm wood plates.
