@@ -3,7 +3,7 @@ A IN-16/IN-8 based nixie clock
 
 
 # FEATURES
-* burn out protection
+* burn out protection (cycle all numbers for 10 seconds every 10minutes)
 * in8 or in16 tube usable via adapter pcbs
 * for 4 (hours::mins) or 6 tubes (hours::mins:secs)
 * easy to expand
