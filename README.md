@@ -1,6 +1,9 @@
 # NixieClock
 A IN-16/IN-8 based nixie clock
 
+![test image size](/documenation/pictures/nixie_fin_prev.JPG)
+
+
 
 # FEATURES
 * burn out protection (cycle all numbers for 10 seconds every 10minutes)
