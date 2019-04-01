@@ -40,6 +40,27 @@ for (int i=0; binval && i < sizeof(bcdval) * 8; i+=4) {
 return bcdval;
 }
 
+String readString;
+String getValue(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = {
+        0, -1};
+    int maxIndex = data.length() - 1;
+    for (int i = 0; i <= maxIndex && found <= index; i++)
+    {
+        if (data.charAt(i) == separator || i == maxIndex)
+        {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i + 1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
+
+
 
 void update_mode_led(){
   digitalWrite(led_hour_pin, LOW);
@@ -55,6 +76,17 @@ if(mode == 0){
   // digitalWrite(led_on_pin, HIGH);
  //  mode= 2;
   }
+
+
+    Serial.print("_t_");
+  Serial.print(hours);
+  Serial.print("_");
+  Serial.print(mins);
+  Serial.print("_");
+  Serial.print(secs);
+  Serial.println("_");
+
+  
   }
 
 
@@ -72,7 +104,7 @@ if(mode == 0){
     
 void setup() {
 
-
+  Serial.begin(9600);
   delay(5000);
  pinMode(storePin, OUTPUT);
  pinMode(shiftPin, OUTPUT);
@@ -154,12 +186,32 @@ if((secs % 2) == 0){
  digitalWrite(shiftPin, HIGH);
  }
  digitalWrite(storePin, HIGH);
+
+   Serial.print("_t_");
+  Serial.print(hours);
+  Serial.print("_");
+  Serial.print(mins);
+  Serial.print("_");
+  Serial.print(secs);
+  Serial.println("_");
+
+  
  }
 
 
 
  void update_rtc(){
   rtc.adjust(DateTime(2000, 1, 1, hours, mins, 0));
+
+    Serial.print("_t_");
+  Serial.print(hours);
+  Serial.print("_");
+  Serial.print(mins);
+  Serial.print("_");
+  Serial.print(secs);
+  Serial.println("_");
+
+  
   }
  
 void loop () {
@@ -169,34 +221,41 @@ void loop () {
   mins=now.minute();
   secs=now.second();
 
+  //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ):
 
-/*
-if (GPS.newNMEAreceived()) {  
-    if (!GPS.parse(GPS.lastNMEA())){
-      for(int i = 0;i< 7;i++){
-    delay(100);
-    digitalWrite(led_hour_pin, LOW);
-    delay(100);
-    digitalWrite(led_hour_pin, LOW);
-    }
-      }   // this also sets the newNMEAreceived() flag to false
-hours =GPS.hour;
-mins = GPS.minute;
-secs = GPS.seconds;
-update_rtc_gps();
-Serial.println("GPSGOT");
-play_sound(10);
 
- for(int i = 0;i< 4;i++){
-    delay(20);
-    digitalWrite(led_on_pin, LOW);
-    delay(20);
-    digitalWrite(led_on_pin, LOW);
+while (Serial.available())
+    {
+        delay(30); //delay to allow buffer to fill
+        if (Serial.available() > 0)
+        {
+            char c = Serial.read(); //gets one byte from serial buffer
+            readString += c;        //makes the string readString
+        }
     }
-update_mode_led();
-   
-  }
-  */
+
+    if (readString.length() > 0)
+    {
+        
+        if (getValue(readString, '_', 1) == "st")
+        {
+           
+           int tmp_hours =getValue(readString, '_', 2).toInt();
+           int tmp_mins =getValue(readString, '_', 3).toInt();
+
+
+           if(tmp_hours > 0 && tmp_hours <24 && tmp_mins > 0 && tmp_mins < 60){
+            hours = tmp_hours;
+            mins = tmp_mins;
+            update_rtc();
+            }else{
+              Serial.println("_error_params.out.of.range_");
+              }
+              
+            
+        }
+        readString = "";
+}
 
 
 

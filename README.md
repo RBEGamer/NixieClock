@@ -87,6 +87,14 @@ After power up the clock you can use the buttons to change the time.
 Select with the `OK-BUTTON` if you want to change minutes or hours and change them with the `+ / - Buttons`.
 
 
+### SERIAL COMMANDS
+The clock send out a current time string `_t_hours_mins_secs_` the t at the beginning is the time identifier.
+
+To set the clock using serial you can use the st time command: `_st_hours_mins_`
+
+note the `_` at the end this has to be send, with an new line charater.
+
+
 # PICTURES
 
 
