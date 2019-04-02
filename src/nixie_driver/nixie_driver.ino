@@ -62,43 +62,7 @@ String getValue(String data, char separator, int index)
 
 
 
-void update_mode_led(){
-  digitalWrite(led_hour_pin, LOW);
-digitalWrite(led_min_pin, LOW);
-digitalWrite(led_on_pin, LOW);
-if(mode == 0){
-  digitalWrite(led_min_pin, HIGH);
-}else if(mode == 1){
-  digitalWrite(led_hour_pin, HIGH);
-}if(mode == 2){
-  digitalWrite(led_on_pin, HIGH);
-}else{
-  // digitalWrite(led_on_pin, HIGH);
- //  mode= 2;
-  }
 
-
-    Serial.print("_t_");
-  Serial.print(hours);
-  Serial.print("_");
-  Serial.print(mins);
-  Serial.print("_");
-  Serial.print(secs);
-  Serial.println("_");
-
-  
-  }
-
-
-
-#define TWI_ADDR_SOUND_MODULE 0x20
-#define SOUND_MODULE_SOUND_ID 6
-  void play_sound(byte _id = SOUND_MODULE_SOUND_ID){
-    Wire.begin();
-   Wire.beginTransmission(TWI_ADDR_SOUND_MODULE); // transmit to device #8
-  Wire.write(_id);              // sends one byte
-  Wire.endTransmission();    // stop transmitting  
-  }
 
 
     
@@ -125,36 +89,28 @@ mode = 2;
 
 random_timer = 0;
 
-update_mode_led();
-play_sound(20);
- 
-  
+
 if (!rtc.begin()) {
     for(int i = 0;i< 4;i++){
     delay(100);
-    digitalWrite(led_hour_pin, LOW);
+    digitalWrite(led_hour_pin, HIGH);
     delay(100);
     digitalWrite(led_hour_pin, LOW);
     }
+    Serial.println("_rct_begin_error_");
   }
 
 
    if (!rtc.isrunning()) {
         for(int i = 0;i< 4;i++){
     delay(100);
-    digitalWrite(led_hour_pin, LOW);
+    digitalWrite(led_min_pin, HIGH);
     delay(100);
-    digitalWrite(led_hour_pin, LOW);
+    digitalWrite(led_min_pin, LOW);
     }
   //  Serial.println("RTC is NOT running!");
      rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-
-for(int i = 0;i< 7;i++){
-    delay(100);
-    digitalWrite(led_hour_pin, LOW);
-    delay(100);
-    digitalWrite(led_hour_pin, LOW);
-    }
+  Serial.println("_rct_isrunning_error_");
   }
 
   delay(100);
@@ -213,7 +169,28 @@ if((secs % 2) == 0){
 
   
   }
- 
+
+
+
+ void anti_burn_out(){
+Serial.println("_abi_begin_");
+  
+   for(int j = 0; j < 4;j++){
+    for(int i = 0; i < 10;i++){
+int muster[shift_digits] = {i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&128,i&64,i&32,i&16};
+ digitalWrite(storePin, LOW);  
+ for (int i=0; i<shift_digits; i++) {
+ digitalWrite(shiftPin, LOW);
+ digitalWrite(dataPin, muster[i]);
+ digitalWrite(shiftPin, HIGH);
+ }
+ digitalWrite(storePin, HIGH);
+      delay(300);
+      }
+    update_nixie();
+    }
+  Serial.println("_abi_finished_");
+  }
 void loop () {
  // Hier passiert nichts.
   DateTime now = rtc.now();
@@ -253,7 +230,9 @@ while (Serial.available())
               }
               
             
-        }
+        }else if(getValue(readString, '_', 1) == "abi"){
+          anti_burn_out();
+          }
         readString = "";
 }
 
@@ -265,49 +244,31 @@ delay(50);
 while(digitalRead(sw_ok_pin) == LOW){
   delay(50);
  }
-if(mode == 0){mode = 1;}
-else if(mode == 1){mode = 2;}
-  else if(mode == 2){mode = 0;}
-else{
-mode = 2;
-}
-Serial.println(mode);
-update_mode_led();  
+Serial.println("_btn_ok_");
+
 }
 
 
   //TODO ADD SUB
-if(digitalRead(sw_add_pin) == LOW && mode == 0){
+if(digitalRead(sw_add_pin) == LOW){
 delay(300);
  mins++;
  if(mins >59){
   mins = 0;
   }
-    Serial.println("mins"+String(mins));
     update_rtc();
     update_nixie();
     return;
 }
 
- if(digitalRead(sw_sub_pin) == LOW && mode == 0){
-delay(300);
- mins--;
- if(mins <0){
-  mins = 59;
-  }
-  //  Serial.println("mins"+String(mins));
-    update_rtc();
-    update_nixie();
-    return;
-}
+ 
   
-if(digitalRead(sw_add_pin) == LOW && mode == 1){
+if(digitalRead(sw_sub_pin) == LOW){
 delay(300);
  hours++;
  if(hours >23){
   hours = 0;
   }
- //   Serial.println("hours"+String(hours));
     update_rtc();
     update_nixie();
     return;
@@ -336,31 +297,13 @@ if((millis()-time) > (1000)){
 
   if(random_timer > (60*10)){
     random_timer = 0;
-    int tmph = hours;
-    int tmpm = mins;
-    int tmps = secs;
 
+
+    anti_burn_out();
 
 
    
-    for(int j = 0; j < 4;j++){
-    for(int i = 0; i < 10;i++){
-int muster[shift_digits] = {i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&8,i&4,i&2,i&1,i&128,i&64,i&32,i&16};
- digitalWrite(storePin, LOW);  
- for (int i=0; i<shift_digits; i++) {
- digitalWrite(shiftPin, LOW);
- digitalWrite(dataPin, muster[i]);
- digitalWrite(shiftPin, HIGH);
- }
- digitalWrite(storePin, HIGH);
-      delay(300);
-      }
-
-      hours = tmph;
-      mins = tmpm;
-      secs = tmps;
-    update_nixie();
-    }
+ 
   }
   }
 
