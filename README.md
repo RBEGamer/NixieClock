@@ -29,18 +29,29 @@ A IN-16/IN-8 based nixie clock
 * 4 20k resistors 1/2w
 * 1 Nixie power supply 180v
 * 3 tht push button
-* 4 shift registers 75HC595
+* 2 shift registers 75HC595
 * 3 led resistors 330Ohms at 1/4w
 * 3 5mm led 20ma
 * 3 10k pull up resistors
 * headers male and female
 
 ## PARTS WIFI ADDON
-* wemod d1 mini esp8266 board
+* wifi addon pcb
+* esp8266 12-e
+* lm1117 smd
 * 1k resistor
 * 2k resistor 
 
 resistors used for voltage divider for the tx(arduino)->rx(esp8266)
+
+
+## PARTS SECONDS
+* seconds addon pcb
+* 1 75HC595
+* 2 Nixie tubes IN16 or IN8
+* 2 nixie tube drivers SN74141
+* 2 20k resistors 1/2w
+
 
 # PARTS FOR THE CASE
 * 7 mdf wood 10*20cm @9mm/10mm
@@ -92,12 +103,21 @@ The other resitors are for adjust the brightness of each tube segment.
 ![test image size](/documenation/pictures/in16_photo.png)
 
 
-## WIFI PCB ADDON PCB
+## WIFI PCB ADDON
 
 This wifi addon pcb sits directly under the Arduino Nano, and is soldered to its header pins.
 Then this sandwich is plugged into the control pcb
 
 ![test image size](/documenation/pictures/wifi_pcb.png)
+
+
+## SEONDS  ADDON PCB
+
+This pcb add 2 more nixie tube outputs, if you want to have seconds,
+no software modification needed. it simply add an other shif register at the end of the others
+
+![test image size](/documenation/pictures/sec_pcb.png)
+
 
 
 ### SOFTWARE
