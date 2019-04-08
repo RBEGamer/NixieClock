@@ -11,6 +11,7 @@ A IN-16/IN-8 based nixie clock
 * for 4 (hours::mins) or 6 tubes (hours::mins:secs)
 * easy to expand
 * simple schematic
+* tube holders with simple mount for easy change
 
 ## FEATURES WIFI EXTENTION
 * using esp8266 to add wifi support
