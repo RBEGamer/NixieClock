@@ -92,6 +92,14 @@ The other resitors are for adjust the brightness of each tube segment.
 ![test image size](/documenation/pictures/in16_photo.png)
 
 
+## WIFI PCB ADDON PCB
+
+This wifi addon pcb sits directly under the Arduino Nano, and is soldered to its header pins.
+Then this sandwich is plugged into the control pcb
+
+![test image size](/documenation/pictures/wifi_pcb.png)
+
+
 ### SOFTWARE
 To flash the arduino you can use the Arduino IDE to flash the `./src/nixie_driver/nixie_driver.ino`
 Select the Arduino Nano board and the SerialPort to Upload the Program.
