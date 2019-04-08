@@ -12,6 +12,12 @@ A IN-16/IN-8 based nixie clock
 * easy to expand
 * simple schematic
 
+## FEATURES WIFI EXTENTION
+* using esp8266 to add wifi support
+* NTP SYNC
+* CAPTIVE PORTAL to set wifi settings
+* set timezone
+* start antiburn-in cycle
 
 # PARTS
 * 1 control pcb see `./documenation/nixie_clock_controller_gerber.zip`
@@ -29,6 +35,12 @@ A IN-16/IN-8 based nixie clock
 * 3 10k pull up resistors
 * headers male and female
 
+## PARTS WIFI ADDON
+* wemod d1 mini esp8266 board
+* 1k resistor
+* 2k resistor 
+
+resistors used for voltage divider for the tx(arduino)->rx(esp8266)
 
 # PARTS FOR THE CASE
 * 7 mdf wood 10*20cm @9mm/10mm
@@ -46,6 +58,9 @@ A IN-16/IN-8 based nixie clock
 # TOOLS
 * drill 4mm 6mm 20mm(for tubes)
 * saw
+* soldering iron
+* hotgluegun
+* step-drill
 
 
 # PCB
@@ -94,6 +109,7 @@ To set the clock using serial you can use the st time command: `_st_hours_mins_`
 
 note the `_` at the end this has to be send, with an new line charater.
 
+start an antiburnin cyncle with `_abi_` the clock send `_abi_started`, `_abi_finished`
 
 # PICTURES
 
