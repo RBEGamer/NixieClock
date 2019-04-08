@@ -255,6 +255,11 @@ void handleSave()
            ntp_server_url = DEFAULT_NTP_SERVER
         }
 
+ //LOAD CURRENT SAVED DATA
+        if (server.argName(i) == "abi") {
+            Serial.println("_abi_");
+            delay(10);
+        }
         
     }
     //SAVE THESE DATA
@@ -308,6 +313,10 @@ void handleRoot()
                            "</form>";
     control_forms += "<br>";
     
+     control_forms += "<form name='btn_on' action='/save' method='GET' required >"
+                     "<input type='hidden' value='abi' name='abi' />"
+                     "<input type='submit' value='START ANTI BURN IN CYCLE'/>"
+                     "</form>";
 
 
      control_forms += "<br><h3> OTHER SETTINGS </h3>";
