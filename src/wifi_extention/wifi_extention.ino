@@ -10,12 +10,12 @@
 #include <Wire.h>
 #include <FS.h> //Include File System Headers
 #include <TimeLib.h>
-#include <NtpClientLib.h>
+#include <NTPClient.h>
 #include <WiFiManager.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
-
+String time_last = "not synced";
 // CONFIG -------------------------------------
 #define WEBSERVER_PORT 80 // set the port for the webserver eg 80 8080
 #define MDNS_NAME "nixieclock" // set hostname
@@ -39,10 +39,12 @@ int sync_mode = 0;
 int timezone = 0;
 String ntp_server_url = "";
 long long last = 0;
-NTPSyncEvent_t ntpEvent; // Last triggered event
-boolean syncEventTriggered = false; // True if a time even has been triggered
-String time_last = "not synced";
+//NTPSyncEvent_t ntpEvent; // Last triggered event
+
 ESP8266WebServer server(WEBSERVER_PORT);
+
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP,DEFAULT_NTP_SERVER,0,60000);
 
 
 
@@ -188,39 +190,20 @@ void save_values_to_eeprom()
     write_file(file_timezone, String(timezone));
 }
 
-void processSyncEvent(NTPSyncEvent_t ntpEvent)
-{
-    if (ntpEvent) {
-        last_error = "Time Sync error";
-        if (ntpEvent == noResponse)
-            last_error = "ntp server not reacable";
-        else if (ntpEvent == invalidAddress)
-            last_error = "npt server ip invalid";
-    }
-    else {
-        time_last = NTP.getTimeDateString(NTP.getLastNTPSync());
-        last_error = time_last;
-    }
-}
-
 
 void send_time_to_clock(){
-  Serial.println("");
-  delay(50);
-  time_t uptime = NTP.getLastNTPSync();
-            if (uptime == 0) {
-                last_error == "uptime == 0";
-                return;
-            }
-            uint8_t seconds = uptime % SECS_PER_MIN;
-            uptime -= seconds;
-            uint8_t minutes = (uptime % SECS_PER_HOUR) / SECS_PER_MIN;
-            uptime -= minutes * SECS_PER_MIN;
-            uint8_t hours = (uptime % SECS_PER_DAY) / SECS_PER_HOUR;
-            uptime -= hours * SECS_PER_HOUR;
-            int16_t days = uptime / SECS_PER_DAY;
-            Serial.println("_st_" + String(hours) + "_" + String(minutes) + "_" + String(seconds) + "_");
-            last_error = "_st_" + String(hours) + "_" + String(minutes) + "_"+ String(seconds) + "_";
+  Serial.flush();
+  delay(100);
+
+
+int tmph = timeClient.getHours();
+if((tmph+timezone)>23){tmph =tmph+timezone-24;}
+else if((tmph+timezone)<0){tmph = tmph+timezone+24;}else{
+  tmph = tmph+timezone;}
+
+            Serial.println("_st_" + String(tmph) + "_" + String(timeClient.getMinutes()) + "_");
+            last_error = "_st_" + String(tmph) + "_" + String(timeClient.getMinutes()) + "_";
+            delay(100);
   }
 
   
@@ -245,14 +228,16 @@ void handleSave()
                 timezone = 0;
             }
             last_error = "set timezone to" + String(timezone);
-            NTP.setTimeZone(timezone, 0);
+            //timeClient.setTimeOffset(timezone);
+            timeClient.forceUpdate();
             send_time_to_clock();
         }
         // ntp_server_url
         if (server.argName(i) == "ntp_server_url") {
             ntp_server_url = server.arg(i);
             last_error = "set ntp_server_url to" + ntp_server_url;
-            NTP.setNtpServerName(String(ntp_server_url), 0);
+            timeClient.setPoolServerName(ntp_server_url.c_str());
+            timeClient.forceUpdate();
             last = 0;
         }
         // formats the filesystem= resets all settings
@@ -274,6 +259,7 @@ void handleSave()
             sync_mode = 1;
            timezone = DEFAULT_TIMEZONE;
            ntp_server_url = DEFAULT_NTP_SERVER;
+           timeClient.forceUpdate();
         }
 
  //LOAD CURRENT SAVED DATA
@@ -300,12 +286,16 @@ void handleSave()
 }
 void handleRoot()
 {
+  String timezonesign = "";
+  if(timezone > 0){
+    timezonesign = "+";
+    }
     String control_forms = "<hr><h2>CURRENT TIME</h2>";
-    control_forms+="<h1>" + time_last + "</h1>";
+    control_forms+="<h1>" + time_last + " ("+timezonesign+" "+ String(timezone)+" Hours)</h1>";
 
 
 
-    control_forms = "<hr><h2>CONTROLS</h2>";
+    control_forms += "<hr><h2>CONTROLS</h2>";
     control_forms += "<br><h3> MAIN CONTROLS </h3>";
 
 
@@ -396,6 +386,12 @@ void setup(void)
     else {
         last_error = "SPIFFS Initialisierung...Fehler!";
     }
+
+
+
+   
+
+    
     // LOAD SETTINGS
     restore_eeprom_values();
     // START WFIFIMANAGER FOR CAPTIVE PORTAL
@@ -412,13 +408,7 @@ void setup(void)
     server.on("/index.html", handleRoot);
     server.onNotFound(handleNotFound);
     server.begin();
-    //START NTP LIB
-    NTP.begin(ntp_server_url, timezone, true, 0);
-    NTP.setInterval(63);
-    NTP.onNTPSyncEvent([](NTPSyncEvent_t event) {
-        ntpEvent = event;
-        syncEventTriggered = true;
-    });
+    
     //START OTA LIB
     ArduinoOTA.onStart([]() {
         String type;
@@ -459,6 +449,15 @@ void setup(void)
     });
 
     ArduinoOTA.begin();
+
+
+
+    timeClient.setTimeOffset(timezone);
+    timeClient.setPoolServerName(ntp_server_url.c_str());
+
+    timeClient.begin();
+
+
 }
 
 
@@ -468,10 +467,11 @@ void loop(void)
     //HANDLE SERVER
     server.handleClient();
     //HANDLE NTP
-    if (syncEventTriggered) {
-        processSyncEvent(ntpEvent);
-        syncEventTriggered = false;
-    }
+    timeClient.update();
+    time_last = timeClient.getFormattedTime();
+
+
+    
     //SEND NTP TIME TO CLOCK
     if ((millis() - last) > 1000 * 60 * NTP_SEND_TIME_INTERVAL) {
         last = millis();   
@@ -481,5 +481,8 @@ void loop(void)
     }
     //HANDLE OTA
     ArduinoOTA.handle();
+    
+     
+
     delay(70);
 }
