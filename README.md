@@ -11,7 +11,14 @@ A IN-16/IN-8 based nixie clock
 * for 4 (hours::mins) or 6 tubes (hours::mins:secs)
 * easy to expand
 * simple schematic
+* tube holders with simple mount for easy change
 
+## FEATURES WIFI EXTENTION
+* using esp8266 to add wifi support
+* NTP SYNC
+* CAPTIVE PORTAL to set wifi settings
+* set timezone
+* start antiburn-in cycle
 
 # PARTS
 * 1 control pcb see `./documenation/nixie_clock_controller_gerber.zip`
@@ -23,11 +30,28 @@ A IN-16/IN-8 based nixie clock
 * 4 20k resistors 1/2w
 * 1 Nixie power supply 180v
 * 3 tht push button
-* 4 shift registers 75HC595
+* 2 shift registers 75HC595
 * 3 led resistors 330Ohms at 1/4w
 * 3 5mm led 20ma
 * 3 10k pull up resistors
 * headers male and female
+
+## PARTS WIFI ADDON
+* wifi addon pcb
+* esp8266 12-e
+* lm1117 smd
+* 1k resistor
+* 2k resistor 
+
+resistors used for voltage divider for the tx(arduino)->rx(esp8266)
+
+
+## PARTS SECONDS
+* seconds addon pcb
+* 1 75HC595
+* 2 Nixie tubes IN16 or IN8
+* 2 nixie tube drivers SN74141
+* 2 20k resistors 1/2w
 
 
 # PARTS FOR THE CASE
@@ -46,6 +70,9 @@ A IN-16/IN-8 based nixie clock
 # TOOLS
 * drill 4mm 6mm 20mm(for tubes)
 * saw
+* soldering iron
+* hotgluegun
+* step-drill
 
 
 # PCB
@@ -77,6 +104,23 @@ The other resitors are for adjust the brightness of each tube segment.
 ![test image size](/documenation/pictures/in16_photo.png)
 
 
+## WIFI PCB ADDON
+
+This wifi addon pcb sits directly under the Arduino Nano, and is soldered to its header pins.
+Then this sandwich is plugged into the control pcb
+
+![test image size](/documenation/pictures/wifi_pcb.png)
+
+
+## SEONDS  ADDON PCB
+
+This pcb add 2 more nixie tube outputs, if you want to have seconds,
+no software modification needed. it simply add an other shif register at the end of the others
+
+![test image size](/documenation/pictures/sec_pcb.png)
+
+
+
 ### SOFTWARE
 To flash the arduino you can use the Arduino IDE to flash the `./src/nixie_driver/nixie_driver.ino`
 Select the Arduino Nano board and the SerialPort to Upload the Program.
@@ -94,6 +138,7 @@ To set the clock using serial you can use the st time command: `_st_hours_mins_`
 
 note the `_` at the end this has to be send, with an new line charater.
 
+start an antiburnin cyncle with `_abi_` the clock send `_abi_started`, `_abi_finished`
 
 # PICTURES
 
