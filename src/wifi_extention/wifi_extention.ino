@@ -21,7 +21,7 @@
 #define MDNS_NAME "nixieclock" // set hostname
 #define WEBSITE_TITLE "Nixie Clck Confuguration" // name your device
 #define SERIAL_BAUD_RATE 9600
-#define NTP_SEND_TIME_INTERVAL 60*12 //sende zeit an uhr all x minuten
+#define NTP_SEND_TIME_INTERVAL 10 //sende zeit an uhr all x minuten
 
 #define DEFAULT_NTP_SERVER "pool.ntp.org"
 #define DEFAULT_TIMEZONE 1
@@ -184,8 +184,8 @@ bool write_file(const char* _file, String _content)
 void save_values_to_eeprom()
 {
     write_file(file_ntp_server, ntp_server_url);
-    write_file(file_syncmode, sync_mode);
-    write_file(file_timezone, timezone);
+    write_file(file_syncmode, String(sync_mode));
+    write_file(file_timezone, String(timezone));
 }
 
 void processSyncEvent(NTPSyncEvent_t ntpEvent)
@@ -203,6 +203,27 @@ void processSyncEvent(NTPSyncEvent_t ntpEvent)
     }
 }
 
+
+void send_time_to_clock(){
+  Serial.println("");
+  delay(50);
+  time_t uptime = NTP.getLastNTPSync();
+            if (uptime == 0) {
+                last_error == "uptime == 0";
+                return;
+            }
+            uint8_t seconds = uptime % SECS_PER_MIN;
+            uptime -= seconds;
+            uint8_t minutes = (uptime % SECS_PER_HOUR) / SECS_PER_MIN;
+            uptime -= minutes * SECS_PER_MIN;
+            uint8_t hours = (uptime % SECS_PER_DAY) / SECS_PER_HOUR;
+            uptime -= hours * SECS_PER_HOUR;
+            int16_t days = uptime / SECS_PER_DAY;
+            Serial.println("_st_" + String(hours) + "_" + String(minutes) + "_" + String(seconds) + "_");
+            last_error = "_st_" + String(hours) + "_" + String(minutes) + "_"+ String(seconds) + "_";
+  }
+
+  
 void handleSave()
 {
     // PARSE ALL GET ARGUMENTS
@@ -225,7 +246,7 @@ void handleSave()
             }
             last_error = "set timezone to" + String(timezone);
             NTP.setTimeZone(timezone, 0);
-            last = 0;
+            send_time_to_clock();
         }
         // ntp_server_url
         if (server.argName(i) == "ntp_server_url") {
@@ -252,7 +273,7 @@ void handleSave()
         if (server.argName(i) == "factreset") {
             sync_mode = 1;
            timezone = DEFAULT_TIMEZONE;
-           ntp_server_url = DEFAULT_NTP_SERVER
+           ntp_server_url = DEFAULT_NTP_SERVER;
         }
 
  //LOAD CURRENT SAVED DATA
@@ -260,6 +281,14 @@ void handleSave()
             Serial.println("_abi_");
             delay(10);
         }
+
+      if (server.argName(i) == "sendtime") {
+            send_time_to_clock();
+            delay(100);
+        }
+
+
+        
         
     }
     //SAVE THESE DATA
@@ -318,6 +347,14 @@ void handleRoot()
                      "<input type='submit' value='START ANTI BURN IN CYCLE'/>"
                      "</form>";
 
+   control_forms += "<form name='btn_on' action='/save' method='GET' required >"
+                     "<input type='hidden' value='sendtime' name='sendtime' />"
+                     "<input type='submit' value='SEND NTP TIME TO CLOCK'/>"
+                     "</form>";
+                     
+
+
+
 
      control_forms += "<br><h3> OTHER SETTINGS </h3>";
 
@@ -340,9 +377,9 @@ void handleRoot()
     control_forms += "<br><hr><h3>LAST ERROR</h3><br>" + last_error;
 
 
-    msg = phead_1 + WEBSITE_TITLE + phead_2 + pstart + control_forms + pend;
+    
 
-    server.send(200, "text/html", msg);
+    server.send(200, "text/html", phead_1 + WEBSITE_TITLE + phead_2 + pstart + control_forms + pend);
 }
 void handleNotFound()
 {
@@ -424,6 +461,8 @@ void setup(void)
     ArduinoOTA.begin();
 }
 
+
+
 void loop(void)
 {
     //HANDLE SERVER
@@ -435,22 +474,9 @@ void loop(void)
     }
     //SEND NTP TIME TO CLOCK
     if ((millis() - last) > 1000 * 60 * NTP_SEND_TIME_INTERVAL) {
-        last = millis();
-        time_t uptime = NTP.getLastNTPSync();
-        if (uptime == 0) {
-            last_error == "uptime == 0";
-            return;
-        }
+        last = millis();   
         if (sync_mode) {
-            uint8_t seconds = uptime % SECS_PER_MIN;
-            uptime -= seconds;
-            uint8_t minutes = (uptime % SECS_PER_HOUR) / SECS_PER_MIN;
-            uptime -= minutes * SECS_PER_MIN;
-            uint8_t hours = (uptime % SECS_PER_DAY) / SECS_PER_HOUR;
-            uptime -= hours * SECS_PER_HOUR;
-            int16_t days = uptime / SECS_PER_DAY;
-            Serial.println("_st_" + String(hours) + "_" + String(minutes) + "_");
-            last_error = "_st_" + String(hours) + "_" + String(minutes) + "_";
+            send_time_to_clock();
         }
     }
     //HANDLE OTA
