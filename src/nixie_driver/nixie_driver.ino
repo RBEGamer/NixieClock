@@ -3,7 +3,7 @@ const int storePin = 10;//ST_CP
 int dataPin = 8; //DS
 
 #define NIXIE_UPDATE_INTERVAL_SECONDS 1
-#define NIXIE_SECOND_DISPLAY_I2C_ADDR 0x42
+#define NIXIE_SECOND_DISPLAY_I2C_ADDR 8
 int led_min_pin = 2;
 int led_hour_pin = 3;
 int led_on_pin = 4;
@@ -108,15 +108,24 @@ void setup() {
   anti_burn_out();
 }
 
+
+//#define FIX
 const int shift_digits = 24;
 void update_nixie() {
+  #ifdef FIX
+  unsigned long t = BCDencode(hours);
+  unsigned long s = BCDencode(mins);
+  unsigned long r = BCDencode(secs);
+  #else
   unsigned long r = BCDencode(hours);
   unsigned long s = BCDencode(mins);
   unsigned long t = BCDencode(secs);
+  #endif
+  
 
 
   Wire.beginTransmission(NIXIE_SECOND_DISPLAY_I2C_ADDR); // transmit to device #8
-  Wire.write((byte)secs);              // sends one byte
+  Wire.write((int)secs);              // sends one byte
   Wire.endTransmission();    // stop transmitting
 
 
@@ -126,7 +135,6 @@ void update_nixie() {
     tsdot = 1;
   }
 
-  //Serial.println(c.hour_z);
   int muster[shift_digits + 1] = {
     tsdot & 1,
     t & 8,
@@ -189,6 +197,10 @@ void anti_burn_out() {
 
   for (int j = 0; j < 4; j++) {
     for (int i = 0; i < 10; i++) {
+      Wire.beginTransmission(NIXIE_SECOND_DISPLAY_I2C_ADDR); // transmit to device #8
+      Wire.write((int)i*11);              // sends one byte
+      Wire.endTransmission();
+  
       int muster[shift_digits] = {
         i & 8,
         i & 4,

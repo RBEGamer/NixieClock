@@ -1,5 +1,5 @@
 #include <Wire.h>
-#define NIXIE_SECOND_DISPLAY_I2C_ADDR 0x42
+#define NIXIE_SECOND_DISPLAY_I2C_ADDR 8
 
 const int shiftPin = 9; //SH_CP
 const int storePin = 10;//ST_CP
@@ -14,11 +14,10 @@ int sw_add_pin = 7;
 int sw_sub_pin = 5;
 int sw_ok_pin = 6;
 
-int hours = 0;
-int mins = 0;
-int secs = 0;
+int val = 0;
 
-const int shift_digits = 24;
+
+
 
 
 unsigned long BCDencode(unsigned long binval) {
@@ -34,41 +33,9 @@ unsigned long BCDencode(unsigned long binval) {
 
 
 void update_nixie() {
-  unsigned long r = BCDencode(hours);
-  unsigned long s = BCDencode(mins);
-  unsigned long t = BCDencode(secs);
-
-
-  Wire.beginTransmission(NIXIE_SECOND_DISPLAY_I2C_ADDR); // transmit to device #8
-  Wire.write((byte)secs);              // sends one byte
-  Wire.endTransmission();    // stop transmitting
-
-
-  //BlINK DOTS
-  unsigned long tsdot = 0;
-  if ((secs % 2) == 0) {
-    tsdot = 1;
-  }
-
+  unsigned long r = BCDencode(val);
   //Serial.println(c.hour_z);
-  int muster[shift_digits + 1] = {
-    tsdot & 1,
-    t & 8,
-    t & 4,
-    t & 2,
-    t & 1,
-    t & 128,
-    t & 64,
-    t & 32,
-    t & 16,
-    s & 8,
-    s & 4,
-    s & 2,
-    s & 1,
-    s & 128,
-    s & 64,
-    s & 32,
-    s & 16,
+  int muster[8] = {
     r & 8,
     r & 4,
     r & 2,
@@ -79,26 +46,17 @@ void update_nixie() {
     r & 16
   };
   digitalWrite(storePin, LOW);
-  for (int i = 0; i < shift_digits + 1; i++) {
+  for (int i = 0; i < 8 + 1; i++) {
     digitalWrite(shiftPin, LOW);
     digitalWrite(dataPin, muster[i]);
     digitalWrite(shiftPin, HIGH);
   }
   digitalWrite(storePin, HIGH);
-
-  Serial.print("_t_");
-  Serial.print(hours);
-  Serial.print("_");
-  Serial.print(mins);
-  Serial.print("_");
-  Serial.print(secs);
-  Serial.println("_");
-
 }
 
 
 void setup() {
-
+  Serial.begin(9600);
     pinMode(storePin, OUTPUT);
   pinMode(shiftPin, OUTPUT);
   pinMode(dataPin, OUTPUT);
@@ -115,17 +73,23 @@ void setup() {
   
   Wire.begin(NIXIE_SECOND_DISPLAY_I2C_ADDR);               
   Wire.onReceive(receiveEvent);
+
+  delay(100);
+  update_nixie();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+update_nixie();
+delay(30);
 }
 
 
 void receiveEvent(int howMany) {
+  if(howMany != sizeof(val)){
+    continue;
+  }
+  val = Wire.read();    // receive byte as an integer
+  //update_nixie();
   
-  int x = Wire.read();    // receive byte as an integer
-  mins = x;
-  update_nixie();
 }
