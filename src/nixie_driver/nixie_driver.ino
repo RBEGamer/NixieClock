@@ -1,11 +1,9 @@
-// Arduino-Pin verbunden mit SH_CP des 74HC595
-int shiftPin = 9;
-// Arduino-Pin erbunden mit ST_CP des 74HC595
-int storePin = 10;
-// Arduino-Pin verbunden mit DS des 74HC595
-int dataPin = 8;
+const int shiftPin = 9; //SH_CP
+const int storePin = 10;//ST_CP
+int dataPin = 8; //DS
 
-#define NIXIE_UPDATE_INTERVAL_SECONDS 20
+#define NIXIE_UPDATE_INTERVAL_SECONDS 1
+#define NIXIE_SECOND_DISPLAY_I2C_ADDR 0x42
 int led_min_pin = 2;
 int led_hour_pin = 3;
 int led_on_pin = 4;
@@ -58,7 +56,9 @@ String getValue(String data, char separator, int index) {
 void setup() {
 
   Serial.begin(9600);
-  delay(5000);
+
+   Wire.begin();
+  delay(500);
   pinMode(storePin, OUTPUT);
   pinMode(shiftPin, OUTPUT);
   pinMode(dataPin, OUTPUT);
@@ -113,6 +113,12 @@ void update_nixie() {
   unsigned long r = BCDencode(hours);
   unsigned long s = BCDencode(mins);
   unsigned long t = BCDencode(secs);
+
+
+  Wire.beginTransmission(NIXIE_SECOND_DISPLAY_I2C_ADDR); // transmit to device #8
+  Wire.write((byte)secs);              // sends one byte
+  Wire.endTransmission();    // stop transmitting
+
 
   //BlINK DOTS
   unsigned long tsdot = 0;
