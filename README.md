@@ -1,5 +1,7 @@
-# NixieClock
-A IN-16/IN-8 based nixie clock
+<img src='/documentation/logo.png' />
+
+
+# A IN-16/IN-8 based nixie clock with WIFI
 
 ![test image size](/documenation/pictures/nixie_fin_prev.JPG)
 
