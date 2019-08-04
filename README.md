@@ -1,5 +1,5 @@
-<img src="/documenation/logo.png" />
 
+![Gopher image](/documenation/logo.png)
 
 # A IN-16/IN-8 based nixie clock with WIFI
 
