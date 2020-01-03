@@ -129,6 +129,8 @@ To reset the `ESP8266` to its flash-mode hold the `BOOT`-Button and toggle the `
 ![test image size](/documenation/pictures/wifi_pcb.png)
 
 
+
+
 ## SEONDS  ADDON PCB
 
 This pcb add 2 more nixie tube outputs, if you want to have seconds,
@@ -180,7 +182,9 @@ start an anti-burnin-cycle with `_abi_` the clock send `_abi_started` and `_abi_
 ## TUBE MOUNT 2
 ![test image size](/documenation/pictures_build/tube_mount.jpg)
 
+## WIFI MODULE
 
+![test image size](/documenation/pictures/wifi_module_mounted.jpg)
 
 
 
