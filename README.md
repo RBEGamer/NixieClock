@@ -102,7 +102,12 @@ See the pictures of the build below!
 You can replace the resistors with wires, except for the `R115 Anode-Current-Resistor 20K`.
 The other resitors are for adjust the brightness of each tube segment.
 
-## NIXIE ADAPTER FOR IN-16 TUBES
+### NOTE
+The `SN74141` will be powered from 5V directly from the 5V rail from the Arduino. This works perfectly fine!
+Ignore the `9V` marking on the PCB.
+
+
+## NIXIE ADAPTER FOR IN-16 TUBES [NOT TESTED]
 ![test image size](/documenation/pictures/in16_photo.png)
 
 
