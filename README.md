@@ -119,7 +119,7 @@ Then this sandwich is plugged into the control pcb. The Arduino-Nano is still re
 ### NOTE
 To program the `ESP8266`, you have to use a seperate `USB2Serial` cable. Solder The `RX,TX,GND` pins from the cable to `TX,RX,GND` of the `ESP8266`. 
 
-Remove the two jumpers from the board!
+Remove the two jumpers `EN_UART` from the board!
 
 To reset the `ESP8266` to its flash-mode hold the `BOOT`-Button and toggle the `RESET`-Button. After that, click `Upload` in your Arduino-IDE.
 
