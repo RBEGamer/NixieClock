@@ -116,16 +116,19 @@ Ignore the `9V` marking on the PCB.
 This wifi addon pcb sits directly under the Arduino Nano, and is soldered to its header pins.
 Then this sandwich is plugged into the control pcb
 
+### NOTE
+To program the `ESP8266`, you have to use a seperate `USB2Serial` cable. Solder The `RX,TX,GND` pins from the cable to `TX,RX,GND` of the `ESP8266`. To reset the `ESP8266` to its flash-mode hold the `BOOT`-Button and toggle the `RESET`-Button. After that, click `Upload` in your Arduino-IDE.
+
+
 ![test image size](/documenation/pictures/wifi_pcb.png)
 
 
 ## SEONDS  ADDON PCB
 
 This pcb add 2 more nixie tube outputs, if you want to have seconds,
-no software modification needed. it simply add an other shif register at the end of the others
+no software modification needed. it simply add an other shift register at the end of the others
 
 ![test image size](/documenation/pictures/sec_pcb.png)
-
 
 
 ### SOFTWARE
