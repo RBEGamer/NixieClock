@@ -114,10 +114,16 @@ Ignore the `9V` marking on the PCB.
 ## WIFI PCB ADDON
 
 This wifi addon pcb sits directly under the Arduino Nano, and is soldered to its header pins.
-Then this sandwich is plugged into the control pcb
+Then this sandwich is plugged into the control pcb. The Arduino-Nano is still required!
 
 ### NOTE
-To program the `ESP8266`, you have to use a seperate `USB2Serial` cable. Solder The `RX,TX,GND` pins from the cable to `TX,RX,GND` of the `ESP8266`. To reset the `ESP8266` to its flash-mode hold the `BOOT`-Button and toggle the `RESET`-Button. After that, click `Upload` in your Arduino-IDE.
+To program the `ESP8266`, you have to use a seperate `USB2Serial` cable. Solder The `RX,TX,GND` pins from the cable to `TX,RX,GND` of the `ESP8266`. 
+
+Remove the two jumpers from the board!
+
+To reset the `ESP8266` to its flash-mode hold the `BOOT`-Button and toggle the `RESET`-Button. After that, click `Upload` in your Arduino-IDE.
+
+!!! Use as sketch the `/src/wifi_extention/wifi_extention.ino` for the ESP8266 !!!
 
 
 ![test image size](/documenation/pictures/wifi_pcb.png)
@@ -135,6 +141,8 @@ no software modification needed. it simply add an other shift register at the en
 To flash the arduino you can use the Arduino IDE to flash the `./src/nixie_driver/nixie_driver.ino`
 Select the Arduino Nano board and the SerialPort to Upload the Program.
 
+If you also have the Wifi-Module installed:
+Use as sketch the `/src/wifi_extention/wifi_extention.ino` for the `ESP8266`.
 
 ### SET TIME
 After power up the clock you can use the buttons to change the time.
