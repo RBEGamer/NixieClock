@@ -154,9 +154,9 @@ The clock send out a current time string `_t_hours_mins_secs_` the t at the begi
 
 To set the clock using serial you can use the st time command: `_st_hours_mins_`
 
-note the `_` at the end this has to be send, with an new line charater.
+note the `_` at the end this has to be send, with a new line charater.
 
-start an antiburnin cyncle with `_abi_` the clock send `_abi_started`, `_abi_finished`
+start an anti-burnin-cycle with `_abi_` the clock send `_abi_started` and `_abi_finished`
 
 # PICTURES
 
