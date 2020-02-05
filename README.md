@@ -33,17 +33,22 @@
 * 1 Nixie power supply 180v
 * 3 tht push button
 * 2 shift registers 75HC595
-* 3 led resistors 330Ohms at 1/4w
+
 * 3 5mm led 20ma
-* 3 10k pull up resistors
+* R1 R5 R6 = 10k pull up resistors
+* R2 R3 R4 = 330 (for the leds)
+
 * headers male and female
 
 ## PARTS WIFI ADDON
 * wifi addon pcb
 * esp8266 12-e
-* lm1117 smd
-* 1k resistor
-* 2k resistor 
+* lm1117 (e.g. LM1117IMP-3.3/NOPB)
+* C1;C2; C3 =  470uf
+* R2, R3,R5, R6 =  10k
+* R1 = 1k
+* R4 = 2k
+* 2x 3x1 2.54 headers + 2 jumpers
 
 resistors used for voltage divider for the tx(arduino)->rx(esp8266)
 
