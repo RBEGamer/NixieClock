@@ -50,6 +50,7 @@
 * R4 = 2k
 * 2x 3x1 2.54 headers + 2 jumpers
 
+
 resistors used for voltage divider for the tx(arduino)->rx(esp8266)
 
 
@@ -117,7 +118,7 @@ Ignore the `9V` marking on the PCB.
 
 
 ## WIFI PCB ADDON
-
+### PLEASE USE THE CORRECT RESISTOR VALUES LISTED IN THE PARTS SECTION ###
 This wifi addon pcb sits directly under the Arduino Nano, and is soldered to its header pins.
 Then this sandwich is plugged into the control pcb. The Arduino-Nano is still required!
 
