@@ -65,16 +65,16 @@ resistors used for voltage divider for the tx(arduino)->rx(esp8266)
 
 
 # PARTS FOR THE CASE
-* 7 mdf wood 10*20cm @9mm/10mm
+* 7 wood pieces 10*20cm @ >8mm
 * 4 tube cover pipe holder `./documenation/3d_parts/pipe_holder_bottom.stl`
 * 4 tube cover pipe covers `./documenation/3d_parts/pipe_holder_top.stl`
 * 2 tube pcb mounting brackets `./documenation/3d_parts/tube_pcb_mounting_bracket.stl`
 * 2 tube pcb mounting bracket covers`./documenation/3d_parts/tube_pcb_mounting_bracket_covers.stl`
-* 4 pcb spacers for M3
+* 4 PCB spacers for M3
 * 4 M3 screws 10mm
 * 2 M4 screws 16mm
 * woodglue
-* 2k glue (mounting 3d parts on glass)
+* 2k glue (mounting 3d parts on glass cover)
 * hotglue
 
 # TOOLS
@@ -86,15 +86,15 @@ resistors used for voltage divider for the tx(arduino)->rx(esp8266)
 
 
 # PCB
-Images and schematic can be found in the `./documenation` folder.
-The gerberfiles to manufacture the PCB too. You also can use a breadboard or a arduino prototyping shiled to build the simple schematic.
+Images, gerber and schematic can be found in the `./documenation` folder.
+You also can use a breadboard or a arduino prototyping shield to build the simple schematic.
 
 # CASE
 
 
 
 
-# DRILLING
+# DRILLING FOUR TUBE VARIANT
 For the top wood plate i have made drill drawing where to drill the 20mm holes for the tubes, if you are using the 10x20cm wood plates.
 The PDF can be found at `./documenation/nixie_case_drilling_plan.pdf`
 The important thing is that one pair of tubes are 35mm away from each other to match with 3d printed mounting brackets.
@@ -120,18 +120,17 @@ Ignore the `9V` marking on the PCB.
 
 
 ## WIFI PCB ADDON
-### PLEASE USE THE CORRECT RESISTOR VALUES LISTED IN THE PARTS SECTION ###
+
+**PLEASE USE THE CORRECT RESISTOR VALUES LISTED IN THE PARTS SECTION**
 This wifi addon pcb sits directly under the Arduino Nano, and is soldered to its header pins.
 Then this sandwich is plugged into the control pcb. The Arduino-Nano is still required!
 
 ### NOTE
-To program the `ESP8266`, you have to use a seperate `USB2Serial` cable. Solder The `RX,TX,GND` pins from the cable to `TX,RX,GND` of the `ESP8266`. 
-
+To program the `ESP8266`, you have to use a `USB2Serial` cable.
+Solder The `RX,TX,GND` pins from the cable to `TX,RX,GND` of the `ESP8266`. 
 Remove the two jumpers `EN_UART` from the board!
-
 To reset the `ESP8266` to its flash-mode hold the `BOOT`-Button and toggle the `RESET`-Button. After that, click `Upload` in your Arduino-IDE.
-
-!!! Use as sketch the `/src/wifi_extention/wifi_extention.ino` for the ESP8266 !!!
+**Use as sketch the `/src/wifi_extention/wifi_extention.ino` for the ESP8266**
 
 
 ![test image size](/documenation/pictures/wifi_pcb.png)
@@ -141,32 +140,27 @@ To reset the `ESP8266` to its flash-mode hold the `BOOT`-Button and toggle the `
 
 ## SEONDS  ADDON PCB
 
-This pcb add 2 more nixie tube outputs, if you want to have seconds,
-no software modification needed. it simply add an other shift register at the end of the others
+This pcb add 2 more nixie tube outputs, if you want to have seconds.
+No software modification needed. it simply adds an other shift register at the end of the chain.
 
 ![test image size](/documenation/pictures/sec_pcb.png)
 
 
 ### SOFTWARE
 To flash the arduino you can use the Arduino IDE to flash the `./src/nixie_driver/nixie_driver.ino`
-Select the Arduino Nano board and the SerialPort to Upload the Program.
-
-If you also have the Wifi-Module installed:
-Use as sketch the `/src/wifi_extention/wifi_extention.ino` for the `ESP8266`.
+Select the Arduino-Nano board and the serial port to upload the program.
 
 ### SET TIME
 After power up the clock you can use the buttons to change the time.
-Select with the `OK-BUTTON` if you want to change minutes or hours and change them with the `+ / - Buttons`.
+Select with the `OK-BUTTON` to change between minutes or hours and change them with the `+ / - Buttons`.
 
 
 ### SERIAL COMMANDS
-The clock send out a current time string `_t_hours_mins_secs_` the t at the beginning is the time identifier.
+The clock send out the current time string `_t_hours_mins_secs_`.
 
-To set the clock using serial you can use the st time command: `_st_hours_mins_`
+To set the clock using serial you can use the `st` time command: `_st_hours_mins_`
 
-note the `_` at the end this has to be send, with a new line charater.
-
-start an anti-burnin-cycle with `_abi_` the clock send `_abi_started` and `_abi_finished`
+**Note: The `_` at the end has to be send, with the `\n` new line charater. **
 
 # PICTURES
 
