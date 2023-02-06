@@ -10,12 +10,12 @@
 # FEATURES
 * burn out protection (cycle all numbers for 10 seconds every 10minutes)
 * in8 or in16 tube usable via adapter pcbs
-* for 4 (hours::mins) or 6 tubes (hours::mins:secs)
+* for 4 (hours:mins) or 6 tubes (hours:mins:secs)
 * easy to expand
-* simple schematic
-* tube holders with simple mount for easy change
+* simple schematic using THT parts only
+* tube holders with simple mount for easy replacement
 
-## FEATURES WIFI EXTENTION
+## [OPTIONAL] FEATURES WIFI EXTENTION
 * using esp8266 to add wifi support
 * NTP SYNC
 * CAPTIVE PORTAL to set wifi settings
@@ -31,7 +31,7 @@
 * 1 RTC Module DS1307
 * 4 20k resistors 1/2w
 * 1 Nixie power supply 180v
-* 3 tht push button
+* 3 THT push button
 * 2 shift registers 75HC595
 
 * 3 5mm led 20ma
@@ -41,6 +41,8 @@
 * headers male and female
 
 ## PARTS WIFI ADDON
+(you can wire a nodemcu directly to the rx/tx of the arduino, so no need for a pcb)
+
 * wifi addon pcb
 * esp8266 12-e
 * lm1117 (e.g. LM1117IMP-3.3/NOPB)
@@ -54,7 +56,7 @@
 resistors used for voltage divider for the tx(arduino)->rx(esp8266)
 
 
-## PARTS SECONDS
+## PARTS FOR SECOND 6-TUBE VERSION
 * seconds addon pcb
 * 1 75HC595
 * 2 Nixie tubes IN16 or IN8
